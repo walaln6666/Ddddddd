@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لعبة القبطان أبو شمر</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="game.js" defer></script>
+</head>
+<body>
+    <div id="game-container">
+        <h1>لعبة القبطان أبو شمر</h1>
+        <div id="player-status">
+            <p>الصحة: <span id="health">100</span></p>
+            <p>الرصاص: <span id="ammo">50</span></p>
+        </div>
+        <div id="controls">
+            <button onclick="move('left')">تحرك لليسار</button>
+            <button onclick="move('right')">تحرك لليمين</button>
+            <button onclick="jump()">قفز</button>
+        </div>
+        <div id="game-message"></div>
+    </div>
+</body>
+</html>
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #d3e7f2;
+    margin: 0;
+}
+
+#game-container {
+    margin-top: 50px;
+}
+
+h1 {
+    font-size: 36px;
+    color: #333;
+}
+
+#player-status {
+    margin: 20px 0;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    margin: 5px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+#controls {
+    margin-top: 20px;
+}
+
+#game-message {
+    font-size: 18px;
+    color: #d43f00;
+}
+let playerHealth = 100;
+let playerAmmo = 50;
+let gameMessage = document.getElementById('game-message');
+let healthElement = document.getElementById('health');
+let ammoElement = document.getElementById('ammo');
+
+// تحريك اللاعب
+function move(direction) {
+    if (direction === 'left') {
+        gameMessage.textContent = 'تحركت لليسار!';
+    } else if (direction === 'right') {
+        gameMessage.textContent = 'تحركت لليمين!';
+    }
+}
+
+// قفز اللاعب
+function jump() {
+    gameMessage.textContent = 'قفزت إلى الأعلى!';
+}
+
+// تحديث الصحة والذخيرة
+function updatePlayerStatus() {
+    healthElement.textContent = playerHealth;
+    ammoElement.textContent = playerAmmo;
+}
+
+// الهجوم باستخدام السيف
+function attackWithSword() {
+    if (playerAmmo > 0) {
+        playerAmmo--;
+        updatePlayerStatus();
+        gameMessage.textContent = 'هجوم بالسيف!';
+    } else {
+        gameMessage.textContent = 'لا يوجد ذخيرة!';
+    }
+}
+
+// إضافة تأثيرات مثل شفاء اللاعب أو إضافة أسلحة
+function collectTreasure() {
+    let item = Math.random() > 0.5 ? 'شفاء' : 'سيف';
+    if (item === 'شفاء') {
+        playerHealth = Math.min(playerHealth + 20, 100);
+        gameMessage.textContent = 'حصلت على شفاء!';
+    } else {
+        playerAmmo += 10;
+        gameMessage.textContent = 'حصلت على سيف!';
+    }
+    updatePlayerStatus();
+}
+
+// التعامل مع الموت
+function playerDies() {
+    gameMessage.textContent = 'لقد توفيت! حاول مرة أخرى.';
+    playerHealth = 100;
+    playerAmmo = 50;
+    updatePlayerStatus();
+}
+
+updatePlayerStatus();
